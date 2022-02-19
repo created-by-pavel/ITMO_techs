@@ -21,7 +21,7 @@ public class Debit implements IAccount {
 
     public String getAccountNumber() { return _accountNum; };
 
-    public void transfer(IAccount accountTo, BigDecimal money) throws BanksException {
+    public void transfer(IAccount accountTo, BigDecimal money) {
         if (_balance.compareTo(money) < 0)
             throw new BanksException("insufficient funds");
 
@@ -31,7 +31,7 @@ public class Debit implements IAccount {
 
     public void topUp(BigDecimal money) { _balance = _balance.add(money); }
 
-    public void withDraw(BigDecimal money) throws BanksException {
+    public void withDraw(BigDecimal money) {
         if (_balance.compareTo(money) < 0)
             throw new BanksException("insufficient funds");
 

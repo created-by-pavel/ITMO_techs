@@ -23,8 +23,7 @@ public class BankSystem {
 
     public List<Bank> getBanks() { return _banks; }
 
-    public IAccount addAccountToBank(Client client, Bank bank, AccountType accountType)
-            throws BanksException {
+    public IAccount addAccountToBank(Client client, Bank bank, AccountType accountType) {
 
         return bank.addAccountToBank(client, accountType, _time);
     }
@@ -58,9 +57,7 @@ public class BankSystem {
         bankFrom.runCommand();
     }
 
-    public void topUp(Client client, Bank bank, IAccount account, BigDecimal money)
-            throws BanksException {
-
+    public void topUp(Client client, Bank bank, IAccount account, BigDecimal money) {
         if (!_banks.contains(bank))
             throw new BanksException("cant find bank");
 
@@ -74,9 +71,7 @@ public class BankSystem {
         bank.runCommand();
     }
 
-    public void withDraw(Client client, Bank bank, IAccount account, BigDecimal money)
-            throws BanksException {
-
+    public void withDraw(Client client, Bank bank, IAccount account, BigDecimal money) {
         if (!_banks.contains(bank))
             throw new BanksException("cant find bank");
 

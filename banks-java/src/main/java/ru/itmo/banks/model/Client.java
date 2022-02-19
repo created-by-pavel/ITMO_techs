@@ -9,9 +9,7 @@ public class Client {
     private String _passportId;
     private Boolean _subscription = false;
 
-    public Client(String name, String surname, String address, String passportId)
-            throws BanksException {
-
+    public Client(String name, String surname, String address, String passportId) {
         if (name == null || surname == null) throw new BanksException("write name and surname");
         _name = name;
         _surname = surname;
@@ -48,7 +46,7 @@ public class Client {
     public void setSurname(String surname) { _surname = surname; }
     public void setAddress(String address) { _address = address; }
 
-    public void setPassportId(String passportId) throws BanksException {
+    public void setPassportId(String passportId) {
         if (passportId.toString().length() != 6)
             throw new BanksException("incorrect passportId");
 

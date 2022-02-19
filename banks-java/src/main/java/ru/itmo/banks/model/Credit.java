@@ -27,9 +27,7 @@ public class Credit implements IAccount {
 
     public void topUp(BigDecimal money) { _balance = _balance.add(money); }
 
-    public void transfer(IAccount accountTo, BigDecimal money)
-            throws BanksException {
-
+    public void transfer(IAccount accountTo, BigDecimal money) {
         if (_balance.signum() == -1) {
             if (_balance.subtract(money).subtract(_commission).compareTo(_creditLimit) >= -1) {
                 throw new BanksException("insufficient funds");
@@ -45,7 +43,6 @@ public class Credit implements IAccount {
     }
 
     public void withDraw(BigDecimal money) {
-
         if (_balance.compareTo(BigDecimal.ZERO) <= 0) {
             if (_balance.subtract(money).subtract(_commission).compareTo(_creditLimit) < 0)
                 throw new BanksException("insufficient funds");

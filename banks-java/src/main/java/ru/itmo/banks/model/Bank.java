@@ -42,14 +42,11 @@ public class Bank {
 
     public String getBankName() { return _name; }
 
-    public IAccount addAccountToBank(Client client, AccountType accountType, Time time)
-            throws BanksException {
-
+    public IAccount addAccountToBank(Client client, AccountType accountType, Time time) {
         short accountNumCount = 16;
         var random = new Random();
         var accountNum = new StringBuilder();
-        while (accountNum.length() < accountNumCount)
-        {
+        while (accountNum.length() < accountNumCount) {
             accountNum.append(random.nextInt(10));
         }
 
@@ -82,7 +79,7 @@ public class Bank {
         _commands.add(command);
     }
 
-    public void runCommand() throws BanksException {
+    public void runCommand() {
         _command.execute();
     }
 
