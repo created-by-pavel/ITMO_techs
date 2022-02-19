@@ -1,12 +1,12 @@
-package models;
+package ru.itmo.banks.model;
 
-import tools.BanksException;
+import ru.itmo.banks.tool.BanksException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Debit implements IAccount{
+public class Debit implements IAccount {
     private final LocalDate _timeStart;
     private BigDecimal _balance = BigDecimal.ZERO;
     private final String _accountNum;
@@ -14,7 +14,6 @@ public class Debit implements IAccount{
     private BigDecimal _percentBalance = BigDecimal.ZERO;
 
     public Debit(String accountNum) {
-
         _timeStart = LocalDate.now();
         _accountNum = accountNum;
         _id = UUID.randomUUID().toString();
@@ -23,7 +22,6 @@ public class Debit implements IAccount{
     public String getAccountNumber() { return _accountNum; };
 
     public void transfer(IAccount accountTo, BigDecimal money) throws BanksException {
-
         if (_balance.compareTo(money) < 0)
             throw new BanksException("insufficient funds");
 
@@ -34,7 +32,6 @@ public class Debit implements IAccount{
     public void topUp(BigDecimal money) { _balance = _balance.add(money); }
 
     public void withDraw(BigDecimal money) throws BanksException {
-
         if (_balance.compareTo(money) < 0)
             throw new BanksException("insufficient funds");
 
@@ -42,12 +39,10 @@ public class Debit implements IAccount{
     }
 
     public void topUpPercentOrCommission(BigDecimal money) {
-
         _percentBalance = _percentBalance.add(money);
     }
 
     public void percentOrCommissionBalanceToZero() {
-
         _percentBalance = BigDecimal.ZERO;
     }
 

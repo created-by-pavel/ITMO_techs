@@ -1,6 +1,6 @@
-package models;
+package ru.itmo.banks.model;
 
-import tools.BanksException;
+import ru.itmo.banks.tool.BanksException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Bank {
-    private final Map<Client, ArrayList<IAccount>> _clientAccounts = new HashMap<>();
-    private final ArrayList<ICommand> _commands = new ArrayList<>();
+    private final Map<Client, List<IAccount>> _clientAccounts = new HashMap<>();
+    private final List<ICommand> _commands = new ArrayList<>();
     private BigDecimal _commission;
     private LocalDate _depositTerm;
     private String _name;
@@ -30,7 +30,8 @@ public class Bank {
     {
         _name = name;
         _trustFactorLimit = trustFactorLimit;
-        _debitPercent = debitPercent.divide(BigDecimal.valueOf(365), RoundingMode.HALF_UP);
+        _debitPercent = debitPercent.
+                divide(BigDecimal.valueOf(365), RoundingMode.HALF_UP);
         _creditLimit = creditLimit;
         _commission = creditCommission;
         _depositPercents = depositPercents;
@@ -41,7 +42,8 @@ public class Bank {
 
     public String getBankName() { return _name; }
 
-    public IAccount addAccountToBank(Client client, AccountType accountType, Time time) throws BanksException {
+    public IAccount addAccountToBank(Client client, AccountType accountType, Time time)
+            throws BanksException {
 
         short accountNumCount = 16;
         var random = new Random();
@@ -76,45 +78,47 @@ public class Bank {
     }
 
     public void setCommand(ICommand command) {
-
         _command = command;
         _commands.add(command);
     }
 
     public void runCommand() throws BanksException {
-
         _command.execute();
     }
 
-    public void cancelCommand(ICommand command) throws BanksException {
-
-        if (!_commands.contains(command)) throw new BanksException("bank cant fount this operation");
+    public void cancelCommand(ICommand command) {
+        if (!_commands.contains(command))
+            throw new BanksException("bank cant fount this operation");
         command.undo();
     }
 
-    public void notify(IAccount account) throws BanksException {
-
-        if(account instanceof Debit || account instanceof Deposit){
+    public void notify(IAccount account) {
+        if(account instanceof Debit || account instanceof Deposit) {
             account.topUp(account.getPercentOrCommissionBalance());
             account.percentOrCommissionBalanceToZero();
             return;
         }
 
-        if(account instanceof Credit){
+        if(account instanceof Credit) {
             account.topUp(account.getPercentOrCommissionBalance().negate());
             account.percentOrCommissionBalanceToZero();
         }
     }
 
-    public void topUpPercents(IAccount account) throws BanksException {
-
-        if(account instanceof Debit){
-            account.topUpPercentOrCommission(account.getBalance().multiply(_debitPercent).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
+    public void topUpPercents(IAccount account) {
+        if(account instanceof Debit) {
+            account.topUpPercentOrCommission(
+                    account.getBalance().
+                            multiply(_debitPercent).
+                            divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
             return;
         }
 
-        if(account instanceof Deposit){
-            account.topUpPercentOrCommission(account.getBalance().multiply(selectDepositPercent(account)).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
+        if(account instanceof Deposit) {
+            account.topUpPercentOrCommission(
+                    account.getBalance().
+                    multiply(selectDepositPercent(account)).
+                    divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
         }
     }
 
@@ -124,25 +128,21 @@ public class Bank {
     }
 
     public void changeDebitPercent(BigDecimal debitPercent) {
-
         _debitPercent = debitPercent;
         notifyDebitClient();
     }
 
     public void changeCreditLimit(BigDecimal creditLimit) {
-
         _creditLimit = creditLimit;
         notifyCreditClient();
     }
 
     public void ChangeTrustFactorLimit(BigDecimal newTrustFactorLimit) {
-
         _trustFactorLimit = newTrustFactorLimit;
         notifyBadTrustFactorClient();
     }
 
-    public void changeDepositPercents(HashMap<BigDecimal, BigDecimal> depositPercents) {
-
+    public void changeDepositPercents(Map<BigDecimal, BigDecimal> depositPercents) {
         _depositPercents = depositPercents;
         notifyDepositClient();
     }
@@ -151,58 +151,56 @@ public class Bank {
 
     public BigDecimal getTrustFactorLimit() { return _trustFactorLimit; }
 
-    public Map<Client, ArrayList<IAccount>> getClientAccounts() { return _clientAccounts; }
+    public Map<Client, List<IAccount>> getClientAccounts() { return _clientAccounts; }
 
     private BigDecimal selectDepositPercent(IAccount account) {
 
-        for(Map.Entry<BigDecimal, BigDecimal> kvp : _depositPercents.entrySet())
-        {
+        for(Map.Entry<BigDecimal, BigDecimal> kvp : _depositPercents.entrySet()) {
             if(account.getBalance().compareTo(kvp.getKey()) > 0) continue;
-            return kvp.getValue().divide(BigDecimal.valueOf(365), 1,RoundingMode.HALF_UP);
+            return kvp.getValue().
+                    divide(BigDecimal.valueOf(365), 1,RoundingMode.HALF_UP);
         }
 
-        return _depositPercents.values().stream().toList().get(_depositPercents.values().size() - 1).divide(BigDecimal.valueOf(365), RoundingMode.HALF_DOWN);
+        return _depositPercents.values().
+                stream().
+                toList().
+                get(_depositPercents.values().size() - 1).
+                divide(BigDecimal.valueOf(365), RoundingMode.HALF_DOWN);
     }
 
     private void notifyCreditClient() {
-
-        for (Map.Entry<Client, ArrayList<IAccount>> kvp : _clientAccounts.entrySet())
-        {
-            if(kvp.getKey().getSubscription() && kvp.getValue().stream().anyMatch(a -> a instanceof Credit))
-            {
+        for (Map.Entry<Client, List<IAccount>> kvp : _clientAccounts.entrySet()) {
+            if(kvp.getKey().getSubscription() && kvp.getValue().
+                    stream().
+                    anyMatch(a -> a instanceof Credit)) {
                 kvp.getKey().creditLimitUpdated();
             }
         }
     }
 
     private void notifyDebitClient() {
-
-        for (Map.Entry<Client, ArrayList<IAccount>> kvp : _clientAccounts.entrySet())
-        {
-            if(kvp.getKey().getSubscription() && kvp.getValue().stream().anyMatch(a -> a instanceof Debit))
-            {
+        for (Map.Entry<Client, List<IAccount>> kvp : _clientAccounts.entrySet()) {
+            if(kvp.getKey().getSubscription() && kvp.getValue().
+                    stream().
+                    anyMatch(a -> a instanceof Debit)) {
                 kvp.getKey().debitPercentsUpdated();
             }
         }
     }
 
     private void notifyDepositClient() {
-
-        for (Map.Entry<Client, ArrayList<IAccount>> kvp : _clientAccounts.entrySet())
-        {
-            if(kvp.getKey().getSubscription() && kvp.getValue().stream().anyMatch(a -> a instanceof Deposit))
-            {
+        for (Map.Entry<Client, List<IAccount>> kvp : _clientAccounts.entrySet()) {
+            if(kvp.getKey().getSubscription() && kvp.getValue().
+                    stream().
+                    anyMatch(a -> a instanceof Deposit)) {
                 kvp.getKey().depositPercentsUpdated();
             }
         }
     }
 
     private void notifyBadTrustFactorClient() {
-
-        for (Map.Entry<Client, ArrayList<IAccount>> kvp : _clientAccounts.entrySet())
-        {
-            if(kvp.getKey().getSubscription() && !kvp.getKey().trustFactor())
-            {
+        for (Map.Entry<Client, List<IAccount>> kvp : _clientAccounts.entrySet()) {
+            if(kvp.getKey().getSubscription() && !kvp.getKey().trustFactor()) {
                 kvp.getKey().trustFactorLimitUpdated();
             }
         }

@@ -1,5 +1,4 @@
-import tools.BanksException;
-import models.*;
+import ru.itmo.banks.model.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.Scanner;
 
 public class Program {
 
-    public static void main(String[] args) throws BanksException {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         var time = new Time();
         var bs = new BankSystem(time);
@@ -39,8 +38,7 @@ public class Program {
         System.out.println("enter 'exit' to stop program");
 
         var clients = new ArrayList<Client>();
-        while (true)
-        {
+        while (true) {
             var a = in.nextLine();
             switch (a)
             {
@@ -49,12 +47,9 @@ public class Program {
                 case "0":
                     System.out.println("enter account number");
                     accountNumber = in.nextLine();
-                    for (var b : bs.getBanks())
-                    {
-                        for (var kvp : b.getClientAccounts().entrySet())
-                        {
-                            for (var ac : kvp.getValue())
-                            {
+                    for (var b : bs.getBanks()) {
+                        for (var kvp : b.getClientAccounts().entrySet()) {
+                            for (var ac : kvp.getValue()) {
                                 if(ac.getAccountNumber().equals(accountNumber))
                                     System.out.println(ac.getBalance());
                             }
@@ -90,8 +85,7 @@ public class Program {
                     System.out.println("enter count of percents");
                     count = in.nextInt();
                     var depositPercents = new HashMap<BigDecimal, BigDecimal>();
-                    for (int i = 0; i < count; i++)
-                    {
+                    for (int i = 0; i < count; i++) {
                         System.out.println("enter sum and then enter percent");
                         sum = in.nextBigDecimal();
                         percent = in.nextBigDecimal();
@@ -109,7 +103,14 @@ public class Program {
                     days = in.nextInt();
 
                     var depositTerm = LocalDate.of(years, months, days);
-                    bs.addBank(new Bank(bankName, trustFactorLimit, debitPercent, creditLimit, creditCommission, depositPercents, depositTerm));
+                    bs.addBank(
+                            new Bank(bankName,
+                            trustFactorLimit,
+                            debitPercent,
+                            creditLimit,
+                            creditCommission,
+                            depositPercents,
+                            depositTerm));
                     break;
 
                 case "3":
@@ -123,18 +124,14 @@ public class Program {
                     System.out.println("enter bank");
                     bankName = in.nextLine();
 
-                    for(var b : bs.getBanks())
-                    {
-                        if (b.getBankName().equals(bankName))
-                        {
+                    for(var b : bs.getBanks()) {
+                        if (b.getBankName().equals(bankName)) {
                             bank = b;
                         }
                     }
 
-                    for(var c : clients)
-                    {
-                        if (c.getName().equals(name) && c.getSurname().equals(surname))
-                        {
+                    for(var c : clients) {
+                        if (c.getName().equals(name) && c.getSurname().equals(surname)) {
                             client = c;
                         }
                     }
@@ -151,30 +148,34 @@ public class Program {
                     name = in.nextLine();
                     surname = in.nextLine();
 
-                    for (var c : clients)
-                    {
-                        if (c.getName().equals(name) && c.getSurname().equals(surname))
-                        {
+                    for (var c : clients) {
+                        if (c.getName().equals(name) && c.getSurname().equals(surname)) {
                             client = c;
                         }
                     }
                     System.out.println("enter bank");
                     bankName = in.nextLine();
                     String finalBankName1 = bankName;
-                    bank = bs.getBanks().stream().filter(b -> b.getBankName().equals(finalBankName1)).findFirst().get(); // ?
+                    bank = bs.getBanks().
+                            stream().
+                            filter(b -> b.getBankName().equals(finalBankName1)).
+                            findFirst().
+                            get();
 
                     System.out.println("on what account do u want to do this operation, enter account_number");
-                    for (Bank b : bs.getBanks())
-                    {
-                        for(var ac : b.getClientAccounts().get(client))
-                        {
+                    for (Bank b : bs.getBanks()) {
+                        for(var ac : b.getClientAccounts().get(client)) {
                             System.out.println(ac.getAccountNumber());
                         }
                     }
 
                     accountNumber = in.nextLine();
                     String finalAccountNumber = accountNumber;
-                    account = bank.getClientAccounts().get(client).stream().filter(ac -> ac.getAccountNumber().equals(finalAccountNumber)).findFirst().get();
+                    account = bank.getClientAccounts().get(client).
+                            stream().
+                            filter(ac -> ac.getAccountNumber().equals(finalAccountNumber)).
+                            findFirst().
+                            get();
 
                     switch (choice)
                     {
@@ -182,24 +183,18 @@ public class Program {
                             System.out.println("on what account do u want to transfer, enter account_number");
                             IAccount account2 = null;
                             var bank2 = new Bank();
-                            for (var b : bs.getBanks())
-                            {
-                                for (var kvp : b.getClientAccounts().entrySet())
-                                {
-                                    for (var ac : kvp.getValue())
-                                    {
+                            for (var b : bs.getBanks()) {
+                                for (var kvp : b.getClientAccounts().entrySet()) {
+                                    for (var ac : kvp.getValue()) {
                                         System.out.println(ac.getAccountNumber());
                                     }
                                 }
                             }
 
                             String accountNumber2 = in.nextLine();
-                            for (var b : bs.getBanks())
-                            {
-                                for (var kvp : bank.getClientAccounts().entrySet())
-                                {
-                                    for (var ac : kvp.getValue())
-                                    {
+                            for (var b : bs.getBanks()) {
+                                for (var kvp : bank.getClientAccounts().entrySet()) {
+                                    for (var ac : kvp.getValue()) {
                                         if (!ac.getAccountNumber().equals(accountNumber2)) continue;
                                         bank2 = b;
                                         account2 = ac;
@@ -242,7 +237,11 @@ public class Program {
                     surname = in.nextLine();
                     String finalName = name;
                     String finalSurname = surname;
-                    client = clients.stream().filter(c -> c.getName().equals(finalName) && c.getSurname().equals(finalSurname)).findFirst().get(); // ?
+                    client = clients.
+                            stream().
+                            filter(c -> c.getName().equals(finalName) && c.getSurname().equals(finalSurname)).
+                            findFirst().
+                            get(); // ?
 
                     System.out.println("what do u want to add");
                     System.out.println("1 - address, 2 - passportId");
@@ -269,7 +268,11 @@ public class Program {
                     System.out.println("enter bankName");
                     bankName = in.nextLine();
                     String finalBankName = bankName;
-                    bank = bs.getBanks().stream().filter(b -> b.getBankName().equals(finalBankName)).findFirst().get(); // ?
+                    bank = bs.getBanks().
+                            stream().
+                            filter(b -> b.getBankName().equals(finalBankName)).
+                            findFirst().
+                            get();
 
                     switch (choice)
                     {
@@ -287,8 +290,7 @@ public class Program {
                             System.out.println("enter count of percents");
                             count = in.nextInt();
                             var newDepositPercents = new HashMap<BigDecimal, BigDecimal>();
-                            for (int i = 0; i < count; i++)
-                            {
+                            for (int i = 0; i < count; i++) {
                                 System.out.println("enter sum and then enter percent");
                                 sum = in.nextBigDecimal();
                                 percent = in.nextBigDecimal();

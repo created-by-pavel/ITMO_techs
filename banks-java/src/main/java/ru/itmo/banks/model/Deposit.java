@@ -1,12 +1,12 @@
-package models;
+package ru.itmo.banks.model;
 
-import tools.BanksException;
+import ru.itmo.banks.tool.BanksException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Deposit implements IAccount{
+public class Deposit implements IAccount {
     private final LocalDate _timeStart;
     private final LocalDate _depositTerm;
     private final Time _time;
@@ -14,8 +14,8 @@ public class Deposit implements IAccount{
     private BigDecimal _balance = BigDecimal.ZERO;
     private BigDecimal _percentBalance = BigDecimal.ZERO;
     private String _id;
-    public Deposit(String accountNum, LocalDate depositTerm, Time time) {
 
+    public Deposit(String accountNum, LocalDate depositTerm, Time time) {
         _timeStart = LocalDate.now();
         _accountNum = accountNum;
         _depositTerm = _timeStart
@@ -30,8 +30,7 @@ public class Deposit implements IAccount{
 
     public void topUp(BigDecimal money) { _balance = _balance.add(money); }
 
-    public void transfer(IAccount accountTo, BigDecimal money) throws BanksException {
-
+    public void transfer(IAccount accountTo, BigDecimal money) {
         if (_time.getTime().compareTo(_depositTerm) < 0)
             throw new BanksException("you can't do it yet");
 
@@ -42,8 +41,7 @@ public class Deposit implements IAccount{
         accountTo.topUp(money);
     }
 
-    public void withDraw(BigDecimal money) throws BanksException {
-
+    public void withDraw(BigDecimal money) {
         if (_time.getTime().compareTo(_depositTerm) < 0)
             throw new BanksException("you can't do it yet");
 

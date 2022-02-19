@@ -1,9 +1,10 @@
+package ru.itmo.banks;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import tools.BanksException;
-import models.*;
+import ru.itmo.banks.tool.BanksException;
+import ru.itmo.banks.model.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class BanksSystemTests {
     private IAccount _pavelDebit;
 
     @Before
-    public void Setup() throws BanksException {
+    public void Setup() {
         _time = new Time();
         _bs = new BankSystem(_time);
         LocalDate _depositTerm = LocalDate.of(0001, 1, 01);
@@ -30,10 +31,32 @@ public class BanksSystemTests {
         _depositPercents.put(BigDecimal.valueOf(50_000), BigDecimal.valueOf(3));
         _depositPercents.put(BigDecimal.valueOf(100_000), BigDecimal.valueOf(3.5));
         _depositPercents.put(BigDecimal.valueOf(200_000), BigDecimal.valueOf(4));
-        _pavel = new ClientBuilder().setName("pavel").setSurname("zavalnyuk").create();
-        _kolya = new ClientBuilder().setName("kolya").setSurname("kondratyev").setPassportId("411777").setAddress("dymskaya 4").create();
-        _tinkov = new Bank("tinkov", BigDecimal.valueOf(200_000), BigDecimal.valueOf(3.65), BigDecimal.valueOf(-20000), BigDecimal.valueOf(100), _depositPercents, _depositTerm);
-        _sberbank = new Bank("sberbank", BigDecimal.valueOf(1000000), BigDecimal.valueOf(7.3), BigDecimal.valueOf(-10000), BigDecimal.valueOf(50), _depositPercents, _depositTerm);
+        _pavel = new ClientBuilder().
+                setName("pavel").
+                setSurname("zavalnyuk").
+                create();
+        _kolya = new ClientBuilder().
+                setName("kolya").
+                setSurname("kondratyev").
+                setPassportId("411777").
+                setAddress("dymskaya 4").
+                create();
+        _tinkov = new Bank(
+                "tinkov",
+                BigDecimal.valueOf(200_000),
+                BigDecimal.valueOf(3.65),
+                BigDecimal.valueOf(-20000),
+                BigDecimal.valueOf(100),
+                _depositPercents,
+                _depositTerm);
+        _sberbank = new Bank(
+                "sberbank",
+                BigDecimal.valueOf(1000000),
+                BigDecimal.valueOf(7.3),
+                BigDecimal.valueOf(-10000),
+                BigDecimal.valueOf(50),
+                _depositPercents,
+                _depositTerm);
         _bs.addBank(_sberbank);
         _bs.addBank(_tinkov);
         _kolyaDeposit = _bs.addAccountToBank(_kolya, _sberbank, AccountType.DEPOSIT);
@@ -43,31 +66,31 @@ public class BanksSystemTests {
     }
 
     @Test
-    public void Transfer() throws BanksException {
+    public void Transfer() {
         _bs.transfer(_pavel, _tinkov, _pavelDebit, _kolyaDeposit, _sberbank, BigDecimal.valueOf(1000));
         Assert.assertEquals(BigDecimal.valueOf(41000), _kolyaDeposit.getBalance());
     }
 
     @Test
-    public void TopUp() throws BanksException {
+    public void TopUp() {
         _bs.topUp(_pavel, _tinkov, _pavelDebit, BigDecimal.valueOf(1000));
         Assert.assertEquals(BigDecimal.valueOf(101_000), _pavelDebit.getBalance());
     }
 
     @Test
-    public void WithDraw() throws BanksException {
+    public void WithDraw() {
         _bs.withDraw(_pavel, _tinkov, _pavelDebit, BigDecimal.valueOf(1000));
         Assert.assertEquals(BigDecimal.valueOf(99_000), _pavelDebit.getBalance());
     }
 
     @Test
-    public void SkipDay() throws BanksException {
+    public void SkipDay() {
         _time.skipDay();
         Assert.assertEquals("10.00", _pavelDebit.getPercentOrCommissionBalance().toString());
     }
 
     @Test
-    public void CancelOperation() throws BanksException {
+    public void CancelOperation() {
         _bs.topUp(_pavel, _tinkov, _pavelDebit, BigDecimal.valueOf(10_000));
         _bs.topUp(_pavel, _tinkov, _pavelDebit, BigDecimal.valueOf(1));
         _bs.cancelOperation(_pavelDebit, _tinkov, _tinkov.getCommands().get(0));
@@ -84,7 +107,7 @@ public class BanksSystemTests {
     }
 
     @Test
-    public void WithDrawMoney_IsBiggerThan_TrustFactorLimit_ThrowException() throws BanksException {
+    public void WithDrawMoney_IsBiggerThan_TrustFactorLimit_ThrowException() {
         _pavelDebit.topUp(BigDecimal.valueOf(200_000));
 
         assertThrows(BanksException.class, ()->{
@@ -93,7 +116,7 @@ public class BanksSystemTests {
     }
 
     @Test
-    public void WithDrawMoney_IsBiggerThan_CreditLimit_ThrowException() throws BanksException {
+    public void WithDrawMoney_IsBiggerThan_CreditLimit_ThrowException() {
         var pavelCredit = _bs.addAccountToBank(_pavel, _tinkov, AccountType.CREDIT);
 
         assertThrows(BanksException.class, ()->{

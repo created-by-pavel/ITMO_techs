@@ -1,6 +1,4 @@
-package models;
-
-import tools.BanksException;
+package ru.itmo.banks.model;
 
 import java.time.LocalDate;
 
@@ -12,23 +10,23 @@ public class Time {
         _dateTime = LocalDate.now();
     }
 
-    public void skipDay() throws BanksException {
-
+    public void skipDay() {
         _dateTime = _dateTime.plusDays(1);
         _bankSystem.notifyBank();
     }
 
-    public void skipMonth() throws BanksException {
-
+    public void skipMonth() {
         LocalDate tmp = _dateTime.plusMonths(1);
-        while (_dateTime.getDayOfMonth() != tmp.getDayOfMonth() || _dateTime.getMonth() != tmp.getMonth())
+        while (_dateTime.getDayOfMonth()
+                != tmp.getDayOfMonth()
+                || _dateTime.getMonth()
+                != tmp.getMonth())
         {
             skipDay();
         }
     }
 
-    public void skipYear() throws BanksException {
-
+    public void skipYear() {
         LocalDate tmp = _dateTime.plusYears(1);
         while (_dateTime.getDayOfMonth() != tmp.getDayOfMonth()
                 || _dateTime.getMonth() != tmp.getMonth()

@@ -1,12 +1,12 @@
-package models;
+package ru.itmo.banks.model;
 
-import tools.BanksException;
+import ru.itmo.banks.tool.BanksException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Credit implements IAccount{
+public class Credit implements IAccount {
     private final LocalDate _timeStart;
     private final BigDecimal _creditLimit;
     private final String _id;
@@ -16,7 +16,6 @@ public class Credit implements IAccount{
     private BigDecimal _commissionBalance = BigDecimal.ZERO;
 
     public Credit(String accountNum, BigDecimal creditLimit, BigDecimal commission) {
-
         _timeStart = LocalDate.now();
         _accountNum = accountNum;
         _creditLimit = creditLimit;
@@ -28,10 +27,10 @@ public class Credit implements IAccount{
 
     public void topUp(BigDecimal money) { _balance = _balance.add(money); }
 
-    public void transfer(IAccount accountTo, BigDecimal money) throws BanksException {
+    public void transfer(IAccount accountTo, BigDecimal money)
+            throws BanksException {
 
-        if (_balance.signum() == -1)
-        {
+        if (_balance.signum() == -1) {
             if (_balance.subtract(money).subtract(_commission).compareTo(_creditLimit) >= -1) {
                 throw new BanksException("insufficient funds");
             }
@@ -45,10 +44,9 @@ public class Credit implements IAccount{
         accountTo.topUp(money);
     }
 
-    public void withDraw(BigDecimal money) throws BanksException {
+    public void withDraw(BigDecimal money) {
 
-        if (_balance.compareTo(BigDecimal.ZERO) <= 0)
-        {
+        if (_balance.compareTo(BigDecimal.ZERO) <= 0) {
             if (_balance.subtract(money).subtract(_commission).compareTo(_creditLimit) < 0)
                 throw new BanksException("insufficient funds");
 

@@ -1,6 +1,6 @@
-package models;
+package ru.itmo.banks.model;
 
-import tools.BanksException;
+import ru.itmo.banks.tool.BanksException;
 
 public class Client {
     private String _name;
@@ -9,7 +9,8 @@ public class Client {
     private String _passportId;
     private Boolean _subscription = false;
 
-    public Client(String name, String surname, String address, String passportId) throws BanksException {
+    public Client(String name, String surname, String address, String passportId)
+            throws BanksException {
 
         if (name == null || surname == null) throw new BanksException("write name and surname");
         _name = name;
@@ -26,6 +27,7 @@ public class Client {
     }
 
     public void subscription() { _subscription = true; }
+
     public boolean getSubscription() { return _subscription; }
 
     public void debitPercentsUpdated() { System.out.println("debit percents updated"); }
@@ -37,7 +39,9 @@ public class Client {
     public void depositPercentsUpdated() { System.out.println("deposit percents updated"); }
 
     public boolean trustFactor() { return _address != null || _passportId != null; }
+
     public String getName() {return _name;}
+
     public String getSurname() {return _surname;}
 
     public void setName(String name) { _name = name; }
@@ -45,8 +49,9 @@ public class Client {
     public void setAddress(String address) { _address = address; }
 
     public void setPassportId(String passportId) throws BanksException {
+        if (passportId.toString().length() != 6)
+            throw new BanksException("incorrect passportId");
 
-        if (passportId.toString().length() != 6) throw new BanksException("incorrect passportId");
         _passportId = passportId;
     }
 }
