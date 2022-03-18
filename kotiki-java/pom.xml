@@ -13,12 +13,19 @@
         <module>service</module>
     </modules>
 
+    <properties>
+        <id>org.postgresql</id>
+        <v>42.3.3</v>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
-            <groupId>org.postgresql</groupId>
+            <groupId>${id}</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.3</version>
+            <version>${v}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
@@ -53,10 +60,5 @@
 
 
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
 
 </project>

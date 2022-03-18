@@ -1,8 +1,8 @@
-package entity;
+package ru.itmo.kotiki.entity;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import tool.Color;
+import ru.itmo.kotiki.enums.Color;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -25,7 +25,7 @@ public class Cat {
     @Column(name = "breed")
     private String breed;
 
-    @Column(name = "color")
+    @Enumerated(EnumType.STRING)
     private Color color;
 
     @Column(name = "birth")

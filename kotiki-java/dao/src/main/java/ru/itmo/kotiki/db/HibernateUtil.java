@@ -1,4 +1,4 @@
-package bl;
+package ru.itmo.kotiki.db;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
