@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CatServiceImpl implements CatService {
-
     @Autowired
     private CatRepository repository;
 
@@ -28,43 +28,44 @@ public class CatServiceImpl implements CatService {
         repository.save(cat);
     }
 
-    public List<CatDTO> getAll() {
-        return repository.findAll().stream().map(convert::convertEntityToDto).collect(Collectors.toList());
+    public List<CatDTO> getAll(String name) {
+        return repository.findByOwnerName(name).stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public CatDTO getById(long id) {
-        return convert.convertEntityToDto(repository.findById(id).orElse(null));
+    public CatDTO getById(long id, String name) {
+        return convert.convertEntityToDto(repository.findByOwnerNameAndId(name, id));
     }
 
-    public void deleteById(long id) {
-        repository.deleteById(id);
+    public void deleteById(long id, String name) {
+        repository.deleteByOwnerNameAndId(name, id);
     }
 
-    @Transactional
-    public void updateCat(CatDTO catDTO) {
-        Cat existingCat = repository.findById(catDTO.getId()).orElse(null);
+    public void updateCat(CatDTO catDTO, String name) {
+        Cat existingCat = repository.findByOwnerNameAndId(name, catDTO.getId());
         if (existingCat == null) throw new KotikiException("cant find");
         existingCat.setName(catDTO.getName());
         existingCat.setBirthDate(catDTO.getBirthDate());
         existingCat.setBreed(catDTO.getBreed());
         existingCat.setColor(catDTO.getColor());
         existingCat.setOwner(convert.convertDtoToEntity(catDTO.getOwnerDTO()));
-        existingCat.setFriends(catDTO.getFriends().stream().map(convert::convertDtoToEntity).collect(Collectors.toList()));
+        existingCat.setFriends(catDTO.getFriends().
+                stream().map(convert::convertDtoToEntity).collect(Collectors.toList()));
         repository.save(existingCat);
     }
 
-    public List<CatDTO> findAllByColor(Color color) {
-        return repository.findByColor(color).stream().map(convert::convertEntityToDto).collect(Collectors.toList());
+    public List<CatDTO> findAllByColor(Color color, String name) {
+        return repository.findAllByOwnerNameAndColor(name, color).
+                stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public List<CatDTO> getFriends(long id) {
-        Cat existingCat = repository.findById(id).orElse(null);
+    public List<CatDTO> getFriends(long id, String name) {
+        Cat existingCat = repository.findByOwnerNameAndId(name, id);
         if (existingCat == null) throw new KotikiException("cant find");
         return existingCat.getFriends().stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public void setFriendsById(long id, List<CatDTO> friends) {
-        Cat existingCat = repository.findById(id).orElse(null);
+    public void setFriendsById(long id, List<CatDTO> friends, String name) {
+        Cat existingCat = repository.findByOwnerNameAndId(name, id);
         if (existingCat == null) throw new KotikiException("cant find");
 
         List<Cat> foundFriends = new ArrayList<>();

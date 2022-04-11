@@ -49,7 +49,7 @@ public class ConvertImpl implements Convert {
     }
 
     public OwnerDTO convertEntityToDto(Owner owner) {
-        OwnerDTO ownerDTO = new OwnerDTO(owner.getId(), owner.getName(), owner.getBirthDate());
+        OwnerDTO ownerDTO = new OwnerDTO(owner.getId(), owner.getName(), owner.getBirthDate(), owner.getPassword(), owner.getRole());
         return ownerDTO;
     }
 
@@ -58,6 +58,8 @@ public class ConvertImpl implements Convert {
         owner.setId(ownerDTO.getId());
         owner.setBirthDate(ownerDTO.getBirthDate());
         owner.setName(ownerDTO.getName());
+        owner.setPassword(ownerDTO.getPassword());
+        owner.setRole(ownerDTO.getRole());
         return owner;
     }
 }

@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name = "owner")
 public class Owner {
@@ -16,6 +18,20 @@ public class Owner {
 
     @Column(name = "birth")
     private Date birthDate;
+
+    @Column(name = "password")
+    private String password;
+
+    @OneToOne(fetch = EAGER)
+    private Role role;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public long getId() {
         return id;
@@ -41,6 +57,14 @@ public class Owner {
         this.birthDate = birthDate;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,7 +83,9 @@ public class Owner {
         return "Owner{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", birthDate='" + birthDate + '\'' +
+                ", birthDate=" + birthDate +
+                ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }
