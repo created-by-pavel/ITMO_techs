@@ -1,6 +1,6 @@
 package ru.itmo.kotiki.dto;
 
-import ru.itmo.kotiki.model.Role;
+import ru.itmo.kotiki.model.User;
 
 import java.sql.Date;
 
@@ -8,15 +8,13 @@ public class OwnerDTO {
     private final Long id;
     private final String name;
     private final Date birthDate;
-    private final String password;
-    private final Role role;
+    private final User user;
 
-    public OwnerDTO(long id, String name, Date birthDate, String password, Role role) {
+    public OwnerDTO(long id, String name, Date birthDate, User user) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
-        this.password = password;
-        this.role = role;
+        this.user = user;
     }
 
     public Long getId() {
@@ -31,12 +29,8 @@ public class OwnerDTO {
         return birthDate;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public Role getRole() {
-        return role;
+    public User getUser() {
+        return user;
     }
 
 }

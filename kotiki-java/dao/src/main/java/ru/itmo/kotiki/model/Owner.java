@@ -19,19 +19,8 @@ public class Owner {
     @Column(name = "birth")
     private Date birthDate;
 
-    @Column(name = "password")
-    private String password;
-
     @OneToOne(fetch = EAGER)
-    private Role role;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private User user;
 
     public long getId() {
         return id;
@@ -57,12 +46,12 @@ public class Owner {
         this.birthDate = birthDate;
     }
 
-    public Role getRole() {
-        return role;
+    public User getUser() {
+        return user;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -84,8 +73,6 @@ public class Owner {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", birthDate=" + birthDate +
-                ", password='" + password + '\'' +
-                ", role=" + role +
                 '}';
     }
 }

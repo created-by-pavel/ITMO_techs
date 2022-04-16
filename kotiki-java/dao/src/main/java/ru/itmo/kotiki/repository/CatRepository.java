@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface CatRepository extends JpaRepository<Cat, Long> {
-    List<Cat> findAllByOwnerNameAndColor(String ownerName, Color color);
+    List<Cat> findAllByOwnerIdAndColor(long ownerId, Color color);
 
-    List<Cat> findByOwnerName(String ownerName);
+    List<Cat> findByOwnerId(long ownerId);
 
-    Cat findByOwnerNameAndId(String ownerName, long id);
+    Cat findByOwnerIdAndId(long ownerId, long id);
 
-    void deleteByOwnerNameAndId(String ownerName, long id);
+    void deleteByOwnerIdAndId(long ownerId, long id);
 }

@@ -7,6 +7,8 @@ import ru.itmo.kotiki.dto.CatDTO;
 import ru.itmo.kotiki.enums.Color;
 import ru.itmo.kotiki.model.Cat;
 import ru.itmo.kotiki.repository.CatRepository;
+import ru.itmo.kotiki.repository.OwnerRepository;
+import ru.itmo.kotiki.repository.UserRepository;
 import ru.itmo.kotiki.tool.KotikiException;
 
 import javax.transaction.Transactional;
@@ -19,6 +21,11 @@ import java.util.stream.Collectors;
 public class CatServiceImpl implements CatService {
     @Autowired
     private CatRepository repository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OwnerRepository ownerRepository;
+
 
     @Autowired
     private Convert convert;
@@ -28,20 +35,20 @@ public class CatServiceImpl implements CatService {
         repository.save(cat);
     }
 
-    public List<CatDTO> getAll(String name) {
-        return repository.findByOwnerName(name).stream().map(convert::convertEntityToDto).collect(Collectors.toList());
+    public List<CatDTO> getAll(String userName) { // username
+        return repository.findByOwnerId(findOwnerId(userName)).stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public CatDTO getById(long id, String name) {
-        return convert.convertEntityToDto(repository.findByOwnerNameAndId(name, id));
+    public CatDTO getById(long id, String userName) {
+        return convert.convertEntityToDto(repository.findByOwnerIdAndId(findOwnerId(userName), id));
     }
 
-    public void deleteById(long id, String name) {
-        repository.deleteByOwnerNameAndId(name, id);
+    public void deleteById(long id, String userName) {
+        repository.deleteByOwnerIdAndId(findOwnerId(userName), id);
     }
 
-    public void updateCat(CatDTO catDTO, String name) {
-        Cat existingCat = repository.findByOwnerNameAndId(name, catDTO.getId());
+    public void updateCat(CatDTO catDTO, String userName) {
+        Cat existingCat = repository.findByOwnerIdAndId(findOwnerId(userName), catDTO.getId());
         if (existingCat == null) throw new KotikiException("cant find");
         existingCat.setName(catDTO.getName());
         existingCat.setBirthDate(catDTO.getBirthDate());
@@ -53,19 +60,19 @@ public class CatServiceImpl implements CatService {
         repository.save(existingCat);
     }
 
-    public List<CatDTO> findAllByColor(Color color, String name) {
-        return repository.findAllByOwnerNameAndColor(name, color).
+    public List<CatDTO> findAllByColor(Color color, String userName) {
+        return repository.findAllByOwnerIdAndColor(findOwnerId(userName), color).
                 stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public List<CatDTO> getFriends(long id, String name) {
-        Cat existingCat = repository.findByOwnerNameAndId(name, id);
+    public List<CatDTO> getFriends(long id, String userName) {
+        Cat existingCat = repository.findByOwnerIdAndId(findOwnerId(userName), id);
         if (existingCat == null) throw new KotikiException("cant find");
         return existingCat.getFriends().stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
-    public void setFriendsById(long id, List<CatDTO> friends, String name) {
-        Cat existingCat = repository.findByOwnerNameAndId(name, id);
+    public void setFriendsById(long id, List<CatDTO> friends, String userName) {
+        Cat existingCat = repository.findByOwnerIdAndId(findOwnerId(userName), id);
         if (existingCat == null) throw new KotikiException("cant find");
 
         List<Cat> foundFriends = new ArrayList<>();
@@ -76,5 +83,14 @@ public class CatServiceImpl implements CatService {
         }
         existingCat.setFriends(foundFriends);
         repository.save(existingCat);
+    }
+
+    private long findOwnerId(String userName) {
+        var user = userRepository.findByName(userName);
+        if (user == null) throw new KotikiException("cant find user");
+        var owner = ownerRepository.findByUserId(user.getId());
+        if (owner == null) throw new KotikiException("cant find owner");
+        System.out.println(owner.getId());
+        return owner.getId();
     }
 }
