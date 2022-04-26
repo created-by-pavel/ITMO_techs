@@ -2,7 +2,7 @@ package ru.itmo.kotiki.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.kotiki.Security.DecodeTokenUtil;
+import ru.itmo.kotiki.security.DecodeTokenUtil;
 import ru.itmo.kotiki.dto.CatDTO;
 import ru.itmo.kotiki.enums.Color;
 import ru.itmo.kotiki.services.CatService;

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.itmo.kotiki.Security.DecodeTokenUtil;
+import ru.itmo.kotiki.security.DecodeTokenUtil;
 import ru.itmo.kotiki.convertation.Convert;
 import ru.itmo.kotiki.convertation.ConvertImpl;
 

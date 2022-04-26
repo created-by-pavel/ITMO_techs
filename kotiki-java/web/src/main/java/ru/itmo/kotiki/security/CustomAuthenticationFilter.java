@@ -1,4 +1,4 @@
-package ru.itmo.kotiki.Security;
+package ru.itmo.kotiki.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
