@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class OwnerServiceImpl implements OwnerService {
     @Autowired
     private OwnerRepository repository;
@@ -29,6 +30,10 @@ public class OwnerServiceImpl implements OwnerService {
         return repository.findAll().stream().map(convert::convertEntityToDto).collect(Collectors.toList());
     }
 
+    public Owner getByName(String name) {
+        return repository.findByName(name);
+    }
+
     public OwnerDTO getById(long id) {
         return convert.convertEntityToDto(repository.findById(id).orElse(null));
     }
@@ -37,7 +42,6 @@ public class OwnerServiceImpl implements OwnerService {
         repository.deleteById(id);
     }
 
-    @Transactional
     public void updateOwner(OwnerDTO ownerDTO) {
         Owner existingOwner = repository.findById(ownerDTO.getId()).orElse(null);
         if (existingOwner == null) throw new KotikiException("cant find");

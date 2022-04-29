@@ -2,30 +2,30 @@ package ru.itmo.kotiki.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.itmo.kotiki.dto.OwnerDTO;
-import ru.itmo.kotiki.services.OwnerService;
+import ru.itmo.kotiki.model.Role;
+import ru.itmo.kotiki.services.RoleService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "owner")
-public class OwnerController {
+@RequestMapping(path = "role")
+public class RoleController {
 
     @Autowired
-    private OwnerService service;
+    private RoleService service;
 
     @PostMapping(path = "add")
-    public void addCat(@RequestBody OwnerDTO ownerDTO) {
-        service.save(ownerDTO);
+    public void addRole(@RequestBody Role role) {
+        service.save(role);
     }
 
     @GetMapping(path = "all")
-    public List<OwnerDTO> getAll() {
+    public List<Role> getAll() {
         return service.getAll();
     }
 
     @GetMapping(path = "get-by-id/{id}")
-    public OwnerDTO getById(@PathVariable long id) {
+    public Role getById(@PathVariable long id) {
         return service.getById(id);
     }
 
@@ -33,10 +33,4 @@ public class OwnerController {
     public void deleteById(@PathVariable long id) {
         service.deleteById(id);
     }
-
-    @PutMapping(path = "update")
-    public void updateOwner(@RequestBody OwnerDTO ownerDTO) {
-        service.updateOwner(ownerDTO);
-    }
-
 }

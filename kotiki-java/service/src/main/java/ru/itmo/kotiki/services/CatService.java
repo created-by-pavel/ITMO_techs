@@ -8,17 +8,17 @@ import java.util.List;
 public interface CatService {
     void save(CatDTO catDTO);
 
-    List<CatDTO> getAll();
+    List<CatDTO> getAll(String name);
 
-    CatDTO getById(long id);
+    CatDTO getById(long id, String name);
 
-    void deleteById(long id);
+    void deleteById(long id, String name);
 
-    void updateCat(CatDTO catDTO);
+    void updateCat(CatDTO catDTO, String name);
 
-    List<CatDTO> findAllByColor(Color color);
+    List<CatDTO> findAllByColor(Color color, String name);
 
-    List<CatDTO> getFriends(long id);
+    List<CatDTO> getFriends(long id, String name);
 
-    void setFriendsById(long id, List<CatDTO> friends);
+    void setFriendsById(long id, List<CatDTO> friends, String name);
 }

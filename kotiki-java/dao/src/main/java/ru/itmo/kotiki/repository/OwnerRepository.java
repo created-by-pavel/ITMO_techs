@@ -12,4 +12,8 @@ import java.util.List;
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
     @Query(value = "SELECT * FROM cat WHERE cat.owner_id = :ownerId", nativeQuery = true)
     List<Cat> getCatsByOwnerId(long ownerId);
+
+    Owner findByName(String name);
+
+    Owner findByUserId(long id);
 }
