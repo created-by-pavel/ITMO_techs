@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.kotiki.common.dto.CatDTO;
 import ru.itmo.kotiki.common.enums.Color;
-import ru.itmo.kotiki.common.requestTemplate.DeleteRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.GetRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.PatchRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.PutRequestTemplate;
+import ru.itmo.kotiki.common.requestTemplate.*;
 import ru.itmo.kotiki.mainservice.web.security.DecodeTokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +31,7 @@ public class CatController {
     @GetMapping(path = "all")
     public List<CatDTO> getAll(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        GetRequestTemplate requestTemplate = new GetRequestTemplate(username);
+        RequestTemplate requestTemplate = new RequestTemplate(username);
         requestTemplate.setRoute("getAllQueue");
         return (ArrayList<CatDTO>) template.convertSendAndReceive("getAllQueue", requestTemplate);
     }
@@ -43,7 +40,7 @@ public class CatController {
     public CatDTO getById(@PathVariable long id, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        GetRequestTemplate requestTemplate = new GetRequestTemplate(id, username);
+        RequestTemplate requestTemplate = new RequestTemplate(id, username);
         requestTemplate.setRoute("getByIdQueue");
         return (CatDTO) template.convertSendAndReceive("getByIdQueue", requestTemplate);
     }
@@ -51,7 +48,7 @@ public class CatController {
     @GetMapping(path = "get-by-color/{color}")
     public List<CatDTO> getByColor(@PathVariable Color color, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        GetRequestTemplate requestTemplate = new GetRequestTemplate(color, username);
+        RequestTemplate requestTemplate = new RequestTemplate(color, username);
         requestTemplate.setRoute("getByColorQueue");
         return (ArrayList<CatDTO>) template.convertSendAndReceive("getByColorQueue", requestTemplate);
     }
@@ -59,7 +56,7 @@ public class CatController {
     @GetMapping(path = "get-friends/{id}")
     public List<CatDTO> getFriends(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        GetRequestTemplate requestTemplate = new GetRequestTemplate(id, username);
+        RequestTemplate requestTemplate = new RequestTemplate(id, username);
         requestTemplate.setRoute("getFriendsQueue");
         return (ArrayList<CatDTO>) template.convertSendAndReceive("getFriendsQueue", requestTemplate);
     }
@@ -67,24 +64,22 @@ public class CatController {
     @DeleteMapping(path = "delete/{id}")
     public void deleteById(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        DeleteRequestTemplate requestTemplate = new DeleteRequestTemplate(id, username);
+        RequestTemplate requestTemplate = new RequestTemplate(id, username);
         template.convertAndSend("deleteQueue", requestTemplate);
     }
 
     @PutMapping(path = "update")
     public void updateCat(@RequestBody CatDTO catDTO, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        PutRequestTemplate requestTemplate = new PutRequestTemplate(catDTO, username);
+        RequestTemplate requestTemplate = new RequestTemplate(catDTO, username);
         template.convertAndSend("updateQueue", requestTemplate);
     }
 
     @PatchMapping(path = "set-friends/{id}&&")
     public void setFriends(@PathVariable long id, @RequestBody List<CatDTO> friends, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = decodeTokenUtil.decodeToken(request, response);
-        PatchRequestTemplate requestTemplate = new PatchRequestTemplate(id, username);
+        RequestTemplate requestTemplate = new RequestTemplate(id, username);
         template.convertAndSend("setFriendsQueue", requestTemplate);
-
-        //docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.10-management
     }
 }
 

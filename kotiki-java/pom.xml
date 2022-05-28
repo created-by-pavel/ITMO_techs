@@ -11,11 +11,11 @@
         <relativePath/>
     </parent>
 
-    <groupId>ru.itmo.kotiki_spring</groupId>
-    <artifactId>kotiki-java-spring</artifactId>
+    <groupId>ru.itmo.kotiki</groupId>
+    <artifactId>kotiki-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kotiki-java-spring</name>
-    <description>lab3</description>
+    <name>kotiki-java</name>
+    <description>lab5</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -52,8 +52,6 @@
             <artifactId>java-jwt</artifactId>
             <version>3.19.1</version>
         </dependency>
-
-
     </dependencies>
 
 </project>

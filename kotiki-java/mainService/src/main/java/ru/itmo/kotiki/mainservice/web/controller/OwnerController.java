@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.itmo.kotiki.common.dto.OwnerDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "owner/")
@@ -17,10 +20,10 @@ public class OwnerController {
         template.convertAndSend("addOwnerQueue", ownerDTO);
     }
 
-    /*@GetMapping(path = "all")
+    @GetMapping(path = "all")
     public List<OwnerDTO> getAll() {
-       return (ArrayList<OwnerDTO>) template.sendAndReceive("getAllOwnersQueue");
-    }*/
+       return (ArrayList<OwnerDTO>) template.convertSendAndReceive("getAllOwnersQueue", "aboba");
+    }
 
     @GetMapping(path = "get-by-id/{id}")
     public OwnerDTO getById(@PathVariable long id) {

@@ -2,10 +2,10 @@ package ru.itmo.kotiki.ownerservice.service.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.itmo.kotiki.common.convertation.Convert;
 import ru.itmo.kotiki.common.dto.OwnerDTO;
 import ru.itmo.kotiki.common.model.Owner;
 import ru.itmo.kotiki.ownerservice.repository.OwnerRepository;
-import ru.itmo.kotiki.ownerservice.service.convertation.Convert;
 import ru.itmo.kotiki.ownerservice.service.tool.OwnerServiceException;
 
 import javax.transaction.Transactional;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.itmo.kotiki.catservice.repository.CatRepository;
 import ru.itmo.kotiki.catservice.repository.OwnerRepository;
 import ru.itmo.kotiki.catservice.repository.UserRepository;
-import ru.itmo.kotiki.catservice.service.convertation.Convert;
+import ru.itmo.kotiki.common.convertation.Convert;
 import ru.itmo.kotiki.catservice.service.tool.CatServiceException;
 import ru.itmo.kotiki.common.dto.CatDTO;
 import ru.itmo.kotiki.common.enums.Color;

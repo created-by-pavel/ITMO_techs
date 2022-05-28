@@ -1,4 +1,4 @@
-package ru.itmo.kotiki.mainservice.service.convertation;
+package ru.itmo.kotiki.common.convertation;
 
 import ru.itmo.kotiki.common.dto.CatDTO;
 import ru.itmo.kotiki.common.dto.OwnerDTO;

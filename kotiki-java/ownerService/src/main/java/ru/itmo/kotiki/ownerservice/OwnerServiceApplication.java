@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import ru.itmo.kotiki.ownerservice.service.convertation.Convert;
-import ru.itmo.kotiki.ownerservice.service.convertation.ConvertImpl;
+import ru.itmo.kotiki.common.convertation.Convert;
+import ru.itmo.kotiki.common.convertation.ConvertImpl;
 
 @EnableJpaRepositories(basePackages = {"ru.itmo.kotiki.ownerservice.*"})
 @EntityScan(basePackages = {"ru.itmo.kotiki.**"})

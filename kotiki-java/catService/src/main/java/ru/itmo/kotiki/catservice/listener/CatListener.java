@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.itmo.kotiki.catservice.service.services.CatService;
 import ru.itmo.kotiki.common.dto.CatDTO;
 import ru.itmo.kotiki.common.enums.Color;
-import ru.itmo.kotiki.common.requestTemplate.DeleteRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.GetRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.PatchRequestTemplate;
-import ru.itmo.kotiki.common.requestTemplate.PutRequestTemplate;
+import ru.itmo.kotiki.common.requestTemplate.RequestTemplate;
 
 import java.util.List;
 
@@ -25,43 +22,43 @@ public class CatListener {
     }
 
     @RabbitListener(queues = "getByIdQueue")
-    public CatDTO getById(@Payload GetRequestTemplate getRequestTemplate) {
-        var parameters = getRequestTemplate.getParameters();
+    public CatDTO getById(@Payload RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         return catService.getById((long) parameters.get(0), (String) parameters.get(1));
     }
 
     @RabbitListener(queues = "getAllQueue")
-    public List<CatDTO> getAll(@Payload GetRequestTemplate getRequestTemplate) {
-        return catService.getAll((String) getRequestTemplate.getParameters().get(0));
+    public List<CatDTO> getAll(@Payload RequestTemplate requestTemplate) {
+        return catService.getAll((String) requestTemplate.getParameters().get(0));
     }
 
     @RabbitListener(queues = "getByColorQueue")
-    public List<CatDTO> getByColor(GetRequestTemplate getRequestTemplate) {
-        var parameters = getRequestTemplate.getParameters();
+    public List<CatDTO> getByColor(RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         return catService.findAllByColor((Color) parameters.get(0), (String) parameters.get(1));
     }
 
     @RabbitListener(queues = "getFriendsQueue")
-    public List<CatDTO> getFriends(GetRequestTemplate getRequestTemplate) {
-        var parameters = getRequestTemplate.getParameters();
+    public List<CatDTO> getFriends(RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         return catService.getFriends((long) parameters.get(0), (String) parameters.get(1));
     }
 
     @RabbitListener(queues = "deleteQueue")
-    public void delete(DeleteRequestTemplate deleteRequestTemplate) {
-        var parameters = deleteRequestTemplate.getParameters();
+    public void delete(RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         catService.deleteById((long) parameters.get(0), (String) parameters.get(1));
     }
 
     @RabbitListener(queues = "setFriendsQueue")
-    public void setFriends(PatchRequestTemplate patchRequestTemplate) {
-        var parameters = patchRequestTemplate.getParameters();
+    public void setFriends(RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         catService.setFriendsById((long) parameters.get(0), (List<CatDTO>) parameters.get(1), (String) parameters.get(2));
     }
 
     @RabbitListener(queues = "updateQueue")
-    public void updateCat(PutRequestTemplate putRequestTemplate) {
-        var parameters = putRequestTemplate.getParameters();
+    public void updateCat(RequestTemplate requestTemplate) {
+        var parameters = requestTemplate.getParameters();
         catService.updateCat((CatDTO) parameters.get(0), (String) parameters.get(1));
     }
 }

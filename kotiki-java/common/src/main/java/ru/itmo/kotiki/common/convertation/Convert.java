@@ -1,9 +1,10 @@
-package ru.itmo.kotiki.ownerservice.service.convertation;
+package ru.itmo.kotiki.common.convertation;
 
 import ru.itmo.kotiki.common.dto.CatDTO;
 import ru.itmo.kotiki.common.dto.OwnerDTO;
 import ru.itmo.kotiki.common.model.Cat;
 import ru.itmo.kotiki.common.model.Owner;
+
 
 public interface Convert {
 
